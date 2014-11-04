@@ -3,12 +3,6 @@
 class BTCE
 {
     const
-        BTC_USD = 'btc_usd',
-        LTC_USD = 'ltc_usd',
-        LTC_BTC = 'ltc_btc',
-        LTC_EUR = 'ltc_eur',
-        BTC_EUR = 'btc_eur',
-        EUR_USD = 'eur_usd',
         METHOD_INFO = 'getInfo',
         METHOD_TRADE = 'Trade',
         METHOD_LIST = 'OrderList',
@@ -62,20 +56,8 @@ class BTCE
         return $out;
     }
 
-    public static function updateInfo() {
-        $result = self::apiQuery(self::METHOD_INFO);
-        if ($result) {
-            $return = $result->{'return'};
-            if ($return) {
-                $funds = $return->{'funds'};
-                if ($funds) {
-                    $usd = $funds->{'usd'};
-                    $btc = $funds->{'btc'};
-                    $ltc = $funds->{'ltc'};
-                    DB::update('wallets',"usd={$usd},btc={$btc},ltc={$ltc}");
-                }
-            }
-        }
+    public static function getInfo() {
+        return self::apiQuery(self::METHOD_INFO);
     }
 
     private function apiQuery($method, $req = []) {
@@ -105,7 +87,7 @@ class BTCE
             curl_setopt($ch, CURLOPT_RETURNTRANSFER , true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION , true);
             curl_setopt($ch, CURLOPT_HTTPHEADER     , $headers);
-            curl_setopt($ch, CURLOPT_USERAGENT      , 'Mozilla/4.0 (compatible; '.SITE_NAME.'; '.php_uname('s').'; PHP/'.phpversion().')');
+            curl_setopt($ch, CURLOPT_USERAGENT      , 'Mozilla/4.0 (compatible; BTC-E PHP API; '.php_uname('s').'; PHP/'.phpversion().')');
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
             curl_setopt($ch, CURLOPT_POST           , count($postfields));
             curl_setopt($ch, CURLOPT_POSTFIELDS     , http_build_query($postfields, '', '&'));
@@ -119,7 +101,8 @@ class BTCE
 
     private static function nonce() {
     /*
-     * ENTER YOUR OWN DB OR OTHER CODE TO GET UNIQUE NONCE HERE
+     * add your own code to create a unique noonce integer value here
+     * the value has to be unique for each api call sent through apiQuery()
      */
         $label = 'nonce';
         $nonce = DB::selectValue($label, $label);
