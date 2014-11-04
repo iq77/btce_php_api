@@ -60,7 +60,7 @@ class BTCE
         return self::apiQuery(self::METHOD_INFO);
     }
 
-    private function apiQuery($method, $req = []) {
+    private static function apiQuery($method, $req = []) {
         $req['method'] = $method;
         $req['nonce'] = self::nonce();
          // Generate the keyed hash value to post
