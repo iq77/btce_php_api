@@ -50,7 +50,7 @@ class BTCE
         $out = false;
         if ($result) {
             $success = $result->{'success'};
-            if ($success == YES)
+            if ($success == 1)
                 $out = true;
         }
         return $out;
