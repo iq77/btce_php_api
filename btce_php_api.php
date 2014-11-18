@@ -51,7 +51,7 @@ class BTCE
         $active_orders = self::apiQuery(self::METHOD_LIST_ACTIVE);
         if ($active_orders) {
             $success = $active_orders->{'success'};
-            if ($success == YES) {
+            if ($success == 1) {
                 $orderlist = get_object_vars($active_orders->{'return'});
                 foreach($orderlist as $varname=>$value) {
                     $obj = $value;
@@ -70,7 +70,7 @@ class BTCE
         $out = false;
         if ($result) {
             $success = $result->{'success'};
-            if ($success == YES)
+            if ($success == 1)
                 $out = true;
         }
         return $out;
